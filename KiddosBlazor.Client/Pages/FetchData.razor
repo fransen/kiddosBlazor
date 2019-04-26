@@ -1,0 +1,65 @@
+﻿@page "/fetchdata"
+@using KiddosBlazor.Shared
+@using KiddosBlazor.Shared.Models
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (item != null)
+{
+    <h1>@item.Onderwerp</h1>
+
+    <p>
+        @item.Body
+    </p>
+
+    <button class="btn btn-primary" onclick="@(async () => await VolgendeItem())">Volgende</button>
+
+}
+
+@*@if (items == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Onderwerp</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <tr>
+                        <td>@item.Onderwerp</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }*@
+
+@functions {
+    Item[] items;
+    Item item;
+    int id;
+
+    protected override async Task OnInitAsync()
+    {
+        //items = await Http.GetJsonAsync<Item[]>("api/Items/Items/");
+
+        item = await Http.GetJsonAsync<Item>($"api/Items/Item/{id}");
+
+    }
+
+    async Task VolgendeItem()
+    {
+        id++;
+        item = await Http.GetJsonAsync<Item>($"api/Items/Item/{id}");
+        Console.WriteLine($"id:{id}");
+    }
+
+}
